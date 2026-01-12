@@ -155,5 +155,5 @@ def main(page: ft.Page):
         row1, row2, row3, row4, row5
     )
 
-ft.app(target=main)
+ft.app(main)
 

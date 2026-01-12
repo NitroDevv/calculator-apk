@@ -1,19 +1,42 @@
 name: Build APK
-on: [push, workflow_dispatch]
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install flet && pip install -r requirements.txt
-      - uses: subosito/flutter-action@v2
+
+      - name: Install Flet
+        run: pip install flet
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
-      - run: flet build apk --verbose
-      - uses: actions/upload-artifact@v4
+
+      - name: Flet Build APK
+        run: flet build apk --verbose
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: calculator-apk
           path: build/apk/app-release.apk
